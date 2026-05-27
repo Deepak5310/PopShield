@@ -1,12 +1,24 @@
 {
   "manifest_version": 3,
   "name": "PopShield",
-  "version": "1.0",
-  "description": "Silently blocks unwanted popups and new tab redirects triggered by sneaky onclick scripts. Browse without interruptions.",
-  "content_scripts": [{
-    "matches": ["https://gyanigurus.xyz/*"],
-    "js": ["content.js"],
-    "run_at": "document_start",
-    "world": "MAIN"
-  }]
+  "version": "2.0",
+  "description": "Silently blocks unwanted popups and new tab redirects. Manage your blocked sites list easily.",
+  "permissions": ["storage", "scripting", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
 }

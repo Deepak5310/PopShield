@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 340px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f0f1a;
+      color: #e2e8f0;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #1e1b4b, #312e81);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #3730a3;
+    }
+    .header img { width: 28px; height: 28px; }
+    .header-text h1 { font-size: 16px; font-weight: 700; color: #c7d2fe; }
+    .header-text p  { font-size: 11px; color: #818cf8; margin-top: 1px; }
+
+    /* ── Quick add current site ── */
+    .quick-add {
+      background: #1a1a2e;
+      padding: 10px 14px;
+      border-bottom: 1px solid #1e1e3a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .current-site {
+      flex: 1;
+      font-size: 12px;
+      color: #94a3b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .current-site span { color: #a5b4fc; font-weight: 600; }
+    .btn-quick {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .btn-quick:hover { background: #4338ca; }
+    .btn-quick:disabled { background: #374151; color: #6b7280; cursor: default; }
+
+    /* ── Manual add ── */
+    .add-section {
+      padding: 12px 14px;
+      border-bottom: 1px solid #1e1e3a;
+      display: flex;
+      gap: 8px;
+    }
+    .add-section input {
+      flex: 1;
+      background: #1e1e3a;
+      border: 1px solid #3730a3;
+      border-radius: 7px;
+      padding: 7px 10px;
+      color: #e2e8f0;
+      font-size: 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .add-section input::placeholder { color: #4b5563; }
+    .add-section input:focus { border-color: #6366f1; }
+    .btn-add {
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-add:hover { background: #4f46e5; }
+
+    /* ── Sites list ── */
+    .list-header {
+      padding: 8px 14px 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #4b5563;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sites-list { max-height: 220px; overflow-y: auto; }
+    .sites-list::-webkit-scrollbar { width: 4px; }
+    .sites-list::-webkit-scrollbar-thumb { background: #3730a3; border-radius: 2px; }
+
+    .site-item {
+      display: flex;
+      align-items: center;
+      padding: 9px 14px;
+      border-bottom: 1px solid #0f0f1a;
+      animation: slideIn 0.2s ease;
+      transition: background 0.1s;
+    }
+    .site-item:hover { background: #13132a; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-8px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .site-dot {
+      width: 7px; height: 7px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-right: 10px;
+      flex-shrink: 0;
+      box-shadow: 0 0 5px #22c55e88;
+    }
+
+    .site-name {
+      flex: 1;
+      font-size: 13px;
+      color: #cbd5e1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-remove {
+      background: transparent;
+      border: 1px solid #374151;
+      border-radius: 5px;
+      color: #6b7280;
+      font-size: 11px;
+      padding: 3px 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-remove:hover { background: #7f1d1d; border-color: #ef4444; color: #fca5a5; }
+
+    /* ── Empty state ── */
+    .empty {
+      text-align: center;
+      padding: 24px 16px;
+      color: #374151;
+      font-size: 12px;
+    }
+    .empty .icon { font-size: 28px; margin-bottom: 6px; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #22c55e;
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+    .toast.error { background: #ef4444; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="icon48.png" alt="PopShield" />
+    <div class="header-text">
+      <h1>PopShield</h1>
+      <p>Popup & redirect blocker</p>
+    </div>
+  </div>
+
+  <div class="quick-add">
+    <div class="current-site">Current: <span id="currentSite">loading...</span></div>
+    <button class="btn-quick" id="quickAddBtn" disabled>+ Block</button>
+  </div>
+
+  <div class="add-section">
+    <input type="text" id="siteInput" placeholder="example.com" />
+    <button class="btn-add" id="addBtn">Add</button>
+  </div>
+
+  <div class="list-header">Blocked Sites</div>
+  <div class="sites-list" id="sitesList"></div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
