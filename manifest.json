@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Popup Blocker",
+  "name": "PopShield",
   "version": "1.0",
+  "description": "Silently blocks unwanted popups and new tab redirects triggered by sneaky onclick scripts. Browse without interruptions.",
   "content_scripts": [{
     "matches": ["https://gyanigurus.xyz/*"],
     "js": ["content.js"],
