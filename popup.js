@@ -134,12 +134,12 @@ async function syncScripts() {
       await registerScript(site);
     }
   }
+  return sites;
 }
 
 // ── Init ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
-  await syncScripts();
-  const sites = await getSites();
+  const sites = await syncScripts();
   renderList(sites);
   loadCurrentTab();
 
