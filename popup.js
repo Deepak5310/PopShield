@@ -124,8 +124,21 @@ async function loadCurrentTab() {
   }
 }
 
+// ── Call DOMContentLoaded ─────────────────────────────
+async function syncScripts() {
+  const sites = await getSites();
+  const registered = await chrome.scripting.getRegisteredContentScripts();
+  const registeredIds = new Set(registered.map(s => s.id));
+  for (const site of sites) {
+    if (!registeredIds.has(`popshield-${site}`)) {
+      await registerScript(site);
+    }
+  }
+}
+
 // ── Init ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
+  await syncScripts();
   const sites = await getSites();
   renderList(sites);
   loadCurrentTab();
